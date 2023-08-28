@@ -9,9 +9,7 @@ const cacheControl = require('./middlewares/cacheControl');
 const router = require('./routes/router');
 const { INTERNAL } = require('./errors/statuses');
 
-const { PORT } = process.env;
-
-// useful methods of req: req.query, req.params
+const { PORT = 3000 } = process.env;
 
 const app = express();
 

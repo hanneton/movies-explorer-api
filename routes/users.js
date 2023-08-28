@@ -8,7 +8,7 @@ router.patch('/me', celebrate({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
     name: Joi.string().required().min(2).max(30),
-  })
+  }),
 }), updateCurrentUser);// обновляет информацию о пользователе (email и имя)
 
 module.exports = router;

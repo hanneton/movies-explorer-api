@@ -17,8 +17,6 @@ function commonController(req, res, next) {
 }
 
 function getSavedMovies(req, res, next) {
-  // useful methods to read data from db
-  // findById, findOne, find
   Movie.find({})
     .then((movies) => res.send(movies))
     .catch(next);

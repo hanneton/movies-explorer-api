@@ -3,7 +3,6 @@
 const User = require('../models/users');
 
 function getCurrentUser(req, res, next) {
-  console.log(req.user._id);
   User.findById(req.user._id)
     .then((user) => res.status(200).send(user))
     .catch(next);
