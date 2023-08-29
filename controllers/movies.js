@@ -10,12 +10,6 @@ const { ForbiddenErr } = require('../errors/forbiddenErr');
 const { NotFoundErr } = require('../errors/notFoundErr');
 const Movie = require('../models/movies');
 
-function commonController(req, res, next) {
-  const { path } = req;
-  res.status(200).send(path);
-  next();
-}
-
 function getSavedMovies(req, res, next) {
   Movie.find({})
     .then((movies) => res.send(movies))
@@ -51,7 +45,6 @@ function removeMovieById(req, res, next) {
 }
 
 module.exports = {
-  commonController,
   getSavedMovies,
   createNewMovie,
   removeMovieById,
