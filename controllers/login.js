@@ -4,6 +4,8 @@ const User = require('../models/users');
 const { ConflictErr } = require('../errors/conflictErr');
 const { UnauthorizedErr } = require('../errors/unauthorizedErr');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 function createUser(req, res, next) {
   const { email, password, name } = req.body;
   User.findOne({ email })
@@ -34,7 +36,7 @@ function login(req, res, next) {
       return bcrypt.compare(password, user.password)
         .then((matched) => (matched ? user : Promise.reject(new UnauthorizedErr('Неправильные почта или пароль'))))
         .then((matchedUser) => {
-          const token = jwt.sign({ _id: matchedUser._id }, 'super-strong-secret', { expiresIn: '7d' });
+          const token = jwt.sign({ _id: matchedUser._id }, NODE_ENV === 'production' ? JWT_SECRET : 'super-strong-secret', { expiresIn: '7d' });
           res.send({ token });
         })
         .catch(next);
