@@ -25,7 +25,7 @@ router.use(auth);
 router.use('/users', users);
 router.use('/movies', movies);
 router.use('*', (req, res, next) => {
-  next(new NotFoundErr('Запрашиваемая страница не найдена'));
+  next(new NotFoundErr({ message: 'Запрашиваемая страница не найдена' }));
 });
 
 module.exports = router;

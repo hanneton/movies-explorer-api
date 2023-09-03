@@ -11,7 +11,8 @@ const { NotFoundErr } = require('../errors/notFoundErr');
 const Movie = require('../models/movies');
 
 function getSavedMovies(req, res, next) {
-  Movie.find({})
+  const owner = req.user._id;
+  Movie.find({ owner })
     .then((movies) => res.send(movies))
     .catch(next);
 }
@@ -20,7 +21,12 @@ function createNewMovie(req, res, next) {
   const movieInfo = { ...req.body, owner: req.user._id };
   Movie.create(movieInfo)
     .then((movie) => res.status(201).send(movie))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestErr(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
+      }
+      next(err);
+    });
 }
 
 function removeMovieById(req, res, next) {

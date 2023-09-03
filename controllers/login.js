@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const { ConflictErr } = require('../errors/conflictErr');
 const { UnauthorizedErr } = require('../errors/unauthorizedErr');
+const { BadRequestErr } = require('../errors/badRequestErr');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -20,7 +21,12 @@ function createUser(req, res, next) {
           password: hash,
         }))
         .then((newUser) => res.send({ name: newUser.name, email: newUser.email }))
-        .catch(next);
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            next(new BadRequestErr(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
+          }
+          next(err);
+        });
     })
     .catch(next);
 }
