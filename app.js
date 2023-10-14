@@ -9,6 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cacheControl = require('./middlewares/cacheControl');
 const router = require('./routes/router');
 const { centralErrorsHandler } = require('./middlewares/centralErrorsHandler');
+const handleCORS = require('./middlewares/corsHandling');
 
 const {
   PORT = 3000,
@@ -24,6 +25,8 @@ app.use(bodyParser.json());
 app.use(cacheControl);
 
 app.use(requestLogger);
+
+app.use(handleCORS);
 
 app.use(helmet());
 
